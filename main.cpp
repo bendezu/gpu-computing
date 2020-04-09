@@ -1,5 +1,6 @@
 #include <iostream>
 #include <amp.h>
+#include "timer.h"
 
 using namespace std;
 using namespace concurrency;
@@ -16,7 +17,11 @@ int main() {
         pB[i] = i;
     }
 
-    AddArrays(10, pA, pB, pC);
+    auto timer = Timer();
+    timer.Start();
+    AddArrays(size, pA, pB, pC);
+    timer.Stop();
+    cout << timer.Elapsed() << endl;
 
     for (int i = 0; i < size; ++i) {
         cout << pC[i] << " ";

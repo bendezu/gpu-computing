@@ -3,4 +3,4 @@ project(GpuComputing)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(GpuComputing main.cpp)
+add_executable(GpuComputing main.cpp timer.cpp timer.h)
