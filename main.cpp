@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <amp.h>
 #include "timer.h"
 
