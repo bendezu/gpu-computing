@@ -4,10 +4,6 @@
 void lab1();
 
 int main() {
-    lab1();
-    return 0;
-}
-
-void lab1() {
     arraySum();
+    return 0;
 }

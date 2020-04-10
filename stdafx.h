@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include <iostream>
 #include <amp.h>
 #include "timer.h"

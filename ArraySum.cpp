@@ -1,29 +1,53 @@
 #include "lab1.h"
+#include "utils.h"
 
-void AddArrays(int n, int* pA, int* pB, int* pC);
+void sumOnSingleCpu(int n, int* pA, int* pB, int* pC);
+void sumOnMultipleCpus(int n, int* pA, int* pB, int* pC);
+void sumOnGpu(int n, int* pA, int* pB, int* pC);
 
 void arraySum() {
-    auto size(10);
-    auto pA = new int[size];
-    auto pB = new int[size];
+    cout << "Initialization" << endl;
+    auto size = 100000000;
+    cout << "size: " << size << endl << endl;
+    auto pA = generateIntArray(size);
+    auto pB = generateIntArray(size);
     auto pC = new int[size];
-    for (int i = 0; i < size; ++i) {
-        pA[i] = i;
-        pB[i] = i;
-    }
-
     auto timer = Timer();
-    timer.Start();
-    AddArrays(size, pA, pB, pC);
-    timer.Stop();
-    cout << timer.Elapsed() << endl;
 
-    for (int i = 0; i < size; ++i) {
-        cout << pC[i] << " ";
+    cout << "Single CPU starts" << endl;
+    timer.Start();
+    sumOnSingleCpu(size, pA, pB, pC);
+    timer.Stop();
+    cout << "CPU done in " << timer.Elapsed() << "ms" << endl << endl;
+
+    cout << "CPUs in parallel starts" << endl;
+    timer.Start();
+    sumOnMultipleCpus(size, pA, pB, pC);
+    timer.Stop();
+    cout << "CPU done in " << timer.Elapsed() << "ms" << endl << endl;
+
+    cout << "GPU starts" << endl;
+    timer.Start();
+    sumOnGpu(size, pA, pB, pC);
+    timer.Stop();
+    cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
+
+}
+
+void sumOnSingleCpu(int n, int* pA, int* pB, int* pC) {
+    for (size_t i = 0; i < n; i++) {
+        pC[i] = pA[i] + pB[i];
     }
 }
 
-void AddArrays(int n, int* pA, int* pB, int* pC) {
+void sumOnMultipleCpus(int n, int* pA, int* pB, int* pC) {
+    #pragma omp parallel for
+    for (int i = 0; i < n; i++) {
+        pC[i] = pA[i] + pB[i];
+    }
+}
+
+void sumOnGpu(int n, int* pA, int* pB, int* pC) {
     array_view<const int, 1> a(n, pA);
     array_view<const int, 1> b(n, pB);
     array_view<int, 1> sum(n, pC);
