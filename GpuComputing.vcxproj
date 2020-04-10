@@ -148,12 +148,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArraySum.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Lab1.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lab1.h" />
+    <ClInclude Include="lab1.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

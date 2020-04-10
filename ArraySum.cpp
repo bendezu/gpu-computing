@@ -1,6 +1,8 @@
-#include "Lab1.h"
+#include "lab1.h"
 
-void lab1() {
+void AddArrays(int n, int* pA, int* pB, int* pC);
+
+void arraySum() {
     auto size(10);
     auto pA = new int[size];
     auto pB = new int[size];
