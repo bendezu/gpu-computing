@@ -151,6 +151,7 @@
     <ClCompile Include="ArraySum.cpp" />
     <ClCompile Include="GpusInfo.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MatrixMultByNum.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

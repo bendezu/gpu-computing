@@ -4,3 +4,5 @@
 void gpusInfo();
 
 void arraySum();
+
+void matrixMultByNum();

@@ -33,6 +33,9 @@
     <ClCompile Include="GpusInfo.cpp">
       <Filter>Исходные файлы\Lab</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixMultByNum.cpp">
+      <Filter>Исходные файлы\Lab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="timer.h">

@@ -2,7 +2,8 @@
 #include "lab1.h"
 
 int main() {
-    gpusInfo();
+    //gpusInfo();
     //arraySum();
+    matrixMultByNum();
     return 0;
 }
