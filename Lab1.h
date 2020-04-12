@@ -8,3 +8,5 @@ void arraySum();
 void matrixMultByNum();
 
 void matrixTransponse();
+
+void matrixByMatrixMult();

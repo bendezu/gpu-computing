@@ -8,7 +8,9 @@ int main() {
     //arraySum();
     //cout << "MATRIX MULTIPLICATION BY NUMBER" << endl;
     //matrixMultByNum();
-    cout << "MATRIX TRANSPONSE" << endl;
-    matrixTransponse();
+    //cout << "MATRIX TRANSPONSE" << endl;
+    //matrixTransponse();
+    cout << "MATRIX BY MATRIX MULTIPLICATION" << endl;
+    matrixByMatrixMult();
     return 0;
 }
