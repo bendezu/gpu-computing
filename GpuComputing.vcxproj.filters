@@ -13,7 +13,7 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Исходные файлы\Lab">
+    <Filter Include="Исходные файлы\Lab1">
       <UniqueIdentifier>{d20fcc5b-c737-4154-aa24-2e415a05538c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -25,16 +25,19 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="ArraySum.cpp">
-      <Filter>Исходные файлы\Lab</Filter>
+      <Filter>Исходные файлы\Lab1</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="GpusInfo.cpp">
-      <Filter>Исходные файлы\Lab</Filter>
+      <Filter>Исходные файлы\Lab1</Filter>
     </ClCompile>
     <ClCompile Include="MatrixMultByNum.cpp">
-      <Filter>Исходные файлы\Lab</Filter>
+      <Filter>Исходные файлы\Lab1</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixTransponse.cpp">
+      <Filter>Исходные файлы\Lab1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
