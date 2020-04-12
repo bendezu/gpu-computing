@@ -5,7 +5,7 @@ void multiplyOnSingleCpu(int rows, int cols, int** matrix, int num, int** result
 void multiplyOnMultipleCpus(int rows, int cols, int** matrix, int num, int** result);
 void multiplyOnGpu(int rows, int cols, int* matrix, int num, int* result);
 
-void matrixMultByNum() {
+void matrixByNumMult() {
     cout << "Initialization" << endl;
     auto rows = 10000;
     auto cols = 5000;
@@ -34,7 +34,6 @@ void matrixMultByNum() {
     multiplyOnGpu(rows, cols, matrixAsArray, num, resultAsArray);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
-
 }
 
 void multiplyOnSingleCpu(int rows, int cols, int** matrix, int num, int** result) {

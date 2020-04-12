@@ -31,11 +31,10 @@ void arraySum() {
     sumOnGpu(size, pA, pB, pC);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
-
 }
 
 void sumOnSingleCpu(int n, int* pA, int* pB, int* pC) {
-    for (size_t i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         pC[i] = pA[i] + pB[i];
     }
 }

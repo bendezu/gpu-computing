@@ -152,7 +152,7 @@
     <ClCompile Include="GpusInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixByMatrixMult.cpp" />
-    <ClCompile Include="MatrixMultByNum.cpp" />
+    <ClCompile Include="MatrixByNumMult.cpp" />
     <ClCompile Include="MatrixTransponse.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="utils.cpp" />

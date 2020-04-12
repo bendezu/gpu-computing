@@ -38,7 +38,6 @@ void matrixByMatrixMult() {
     multiplyOnGpu(rows1, internalDim, cols2, firstMatrixAsArray, secondtMatrixAsArray, resultAsArray);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
-
 }
 
 void multiplyOnSingleCpu(int rows1, int internalDim, int cols2, int** first, int** second, int** result) {

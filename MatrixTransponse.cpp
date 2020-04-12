@@ -33,7 +33,6 @@ void matrixTransponse() {
     transponseOnGpu(rows, cols, matrixAsArray, resultAsArray);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
-
 }
 
 void transponseOnSingleCpu(int rows, int cols, int** matrix, int** result) {

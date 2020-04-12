@@ -5,7 +5,7 @@ void gpusInfo();
 
 void arraySum();
 
-void matrixMultByNum();
+void matrixByNumMult();
 
 void matrixTransponse();
 
