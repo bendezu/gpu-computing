@@ -2,3 +2,5 @@
 #pragma once
 
 void blockTransponse();
+
+void blockMatrixMult();

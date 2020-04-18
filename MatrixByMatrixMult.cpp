@@ -3,7 +3,7 @@
 
 void multiplyOnSingleCpu(int rows1, int internalDim, int cols2, int** first, int** second, int** result);
 void multiplyOnMultipleCpus(int rows1, int internalDim, int cols2, int** first, int** second, int** result);
-void multiplyOnGpu(int rows1, int internalDim, int cols2, int* first, int* second, int* result);
+
 
 void matrixByMatrixMult() {
     cout << "Initialization" << endl;
@@ -61,8 +61,10 @@ void multiplyOnGpu(int rows1, int internalDim, int cols2, int* first, int* secon
     array_view<int, 2> res(rows1, cols2, result);
     res.discard_data();
     parallel_for_each(res.extent, [=](index<2> idx) restrict(amp) { 
+        int sum = 0;
         for (int i = 0; i < internalDim; i++)
-            res[idx] = m1(idx[0], i) * m2(i, idx[1]);
+            sum += m1(idx[0], i) * m2(i, idx[1]);
+        res[idx] = sum;
     });
     res.synchronize();
 }

@@ -28,6 +28,9 @@ void lab1() {
 }
 
 void lab2() {
-    cout << "BLOCK MATRIX TRANSPONSE" << endl;
-    blockTransponse();
+    //cout << "BLOCK MATRIX TRANSPONSE" << endl;
+    //blockTransponse();
+
+    cout << "BLOCK MATRIX MULTIPLICATION" << endl;
+    blockMatrixMult();
 }
