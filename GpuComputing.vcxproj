@@ -150,12 +150,12 @@
   <ItemGroup>
     <ClCompile Include="ArraySum.cpp" />
     <ClCompile Include="BlockMaxtrixMult.cpp" />
-    <ClCompile Include="BlockTransponse.cpp" />
+    <ClCompile Include="BlockTransposition.cpp" />
     <ClCompile Include="GpusInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixByMatrixMult.cpp" />
     <ClCompile Include="MatrixByNumMult.cpp" />
-    <ClCompile Include="MatrixTransponse.cpp" />
+    <ClCompile Include="MatrixTransposition.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

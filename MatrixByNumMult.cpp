@@ -9,7 +9,7 @@ void matrixByNumMult() {
     cout << "Initialization" << endl;
     auto rows = 10000;
     auto cols = 5000;
-    cout << "dimentions: " << rows << "x" << cols << endl << endl;
+    cout << "dimensions: " << rows << "x" << cols << endl << endl;
     auto num = 2;
     auto matrix = generateIntMatrix(rows, cols);
     auto result = createIntMatrix(rows, cols);

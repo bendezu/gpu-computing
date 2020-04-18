@@ -10,7 +10,7 @@ void matrixByMatrixMult() {
     auto rows1 = 1000;
     auto internalDim = 3000;
     auto cols2 = 500;
-    cout << "dimentions: (";
+    cout << "dimensions: (";
     cout << rows1 << "x" << internalDim << ") by (";
     cout << internalDim << "x" << cols2 << ")" << endl << endl;
     auto firstMatrix = generateIntMatrix(rows1, internalDim);
@@ -32,10 +32,10 @@ void matrixByMatrixMult() {
 
     cout << "GPU starts" << endl;
     auto firstMatrixAsArray = matrixToArray(rows1, internalDim, firstMatrix);
-    auto secondtMatrixAsArray = matrixToArray(internalDim, cols2, secondMatrix);
+    auto secondMatrixAsArray = matrixToArray(internalDim, cols2, secondMatrix);
     auto resultAsArray = new int[rows1 * cols2];
     timer.Start();
-    multiplyOnGpu(rows1, internalDim, cols2, firstMatrixAsArray, secondtMatrixAsArray, resultAsArray);
+    multiplyOnGpu(rows1, internalDim, cols2, firstMatrixAsArray, secondMatrixAsArray, resultAsArray);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
 }

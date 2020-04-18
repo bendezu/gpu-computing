@@ -20,16 +20,16 @@ void lab1() {
     cout << "MATRIX BY NUMBER MULTIPLICATION" << endl;
     matrixByNumMult();
 
-    cout << "MATRIX TRANSPONSE" << endl;
-    matrixTransponse();
+    cout << "MATRIX TRANSPOSITION" << endl;
+    matrixTransposition();
 
     cout << "MATRIX BY MATRIX MULTIPLICATION" << endl;
     matrixByMatrixMult();
 }
 
 void lab2() {
-    //cout << "BLOCK MATRIX TRANSPONSE" << endl;
-    //blockTransponse();
+    //cout << "BLOCK MATRIX TRANSPOSITION" << endl;
+    //blockTransposition();
 
     cout << "BLOCK MATRIX MULTIPLICATION" << endl;
     blockMatrixMult();

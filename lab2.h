@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #pragma once
 
-void blockTransponse();
+void blockTransposition();
 
 void blockMatrixMult();
