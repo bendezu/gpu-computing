@@ -3,7 +3,6 @@
 
 void transponseOnSingleCpu(int rows, int cols, int** matrix, int** result);
 void transponseOnMultipleCpus(int rows, int cols, int** matrix, int** result);
-void transponseOnGpu(int rows, int cols, int* matrix, int* result);
 
 void matrixTransponse() {
     cout << "Initialization" << endl;

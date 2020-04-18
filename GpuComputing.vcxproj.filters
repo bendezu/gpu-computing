@@ -16,6 +16,9 @@
     <Filter Include="Исходные файлы\Lab1">
       <UniqueIdentifier>{d20fcc5b-c737-4154-aa24-2e415a05538c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Lab2">
+      <UniqueIdentifier>{469f012c-fcc6-4cfc-83cd-f92f42a6c2a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,6 +45,12 @@
     <ClCompile Include="MatrixByNumMult.cpp">
       <Filter>Исходные файлы\Lab1</Filter>
     </ClCompile>
+    <ClCompile Include="BlockTransponse.cpp">
+      <Filter>Исходные файлы\Lab2</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockMaxtrixMult.cpp">
+      <Filter>Исходные файлы\Lab2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="timer.h">
@@ -54,6 +63,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="lab2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

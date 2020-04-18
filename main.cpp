@@ -1,10 +1,12 @@
 ﻿#pragma once
 #include "lab1.h"
+#include "lab2.h"
 
 void lab1();
+void lab2();
 
 int main() {
-    lab1();
+    lab2();
     return 0;
 }
 
@@ -23,4 +25,9 @@ void lab1() {
 
     cout << "MATRIX BY MATRIX MULTIPLICATION" << endl;
     matrixByMatrixMult();
+}
+
+void lab2() {
+    cout << "BLOCK MATRIX TRANSPONSE" << endl;
+    blockTransponse();
 }
