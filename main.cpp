@@ -28,8 +28,8 @@ void lab1() {
 }
 
 void lab2() {
-    //cout << "BLOCK MATRIX TRANSPOSITION" << endl;
-    //blockTransposition();
+    cout << "BLOCK MATRIX TRANSPOSITION" << endl;
+    blockTransposition();
 
     cout << "BLOCK MATRIX MULTIPLICATION" << endl;
     blockMatrixMult();
