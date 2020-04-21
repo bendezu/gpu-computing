@@ -4,5 +4,8 @@
 #include <amp.h>
 #include "timer.h"
 
-using namespace std;
+using std::wcout;
+using std::cout;
+using std::endl;
+
 using namespace concurrency;

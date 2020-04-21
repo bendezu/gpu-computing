@@ -8,6 +8,7 @@ static const int internalDim = tileSize * 100;
 static const int cols2 = tileSize * 20;
 void tiledMultiplication(int* first, int* second, int* result);
 void sharedMultiplication(int* first, int* second, int* result);
+void rowMultiplication(int* first, int* second, int* result);
 
 void blockMatrixMult() {
     cout << "Initialization" << endl;
@@ -34,6 +35,12 @@ void blockMatrixMult() {
     cout << "Shared multiplication starts" << endl;
     timer.Start();
     sharedMultiplication(firstMatrixAsArray, secondMatrixAsArray, resultAsArray);
+    timer.Stop();
+    cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
+
+    cout << "Row multiplication starts" << endl;
+    timer.Start();
+    rowMultiplication(firstMatrixAsArray, secondMatrixAsArray, resultAsArray);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
 }
@@ -75,9 +82,26 @@ void sharedMultiplication(int* first, int* second, int* result) {
                 for (int k = 0; k < tileSize; k++)
                     sum += local1[row][k] * local2[k][col];
                 tidx.barrier.wait();
-
             }
             res[tidx.global] = sum;
         });
+    res.synchronize();
+}
+
+void rowMultiplication(int* first, int* second, int* result) {
+    array_view<const int, 2> m1(rows1, internalDim, first);
+    array_view<const int, 2> m2(internalDim, cols2, second);
+    array_view<int, 2> res(rows1, cols2, result);
+    res.discard_data();
+    extent<1> e(rows1);
+    parallel_for_each(e, [=](index<1> idx) restrict(amp) {
+        int i = idx[0];
+        for (int j = 0; j < cols2; j++) {
+            int sum = 0;
+            for (int k = 0; k < internalDim; k++)
+                sum += m1(i, k) * m2(k, j);
+            res(i, j) = sum;
+        }
+    });
     res.synchronize();
 }

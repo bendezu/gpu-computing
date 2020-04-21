@@ -37,8 +37,8 @@ void blockTransposeOnGpu(int* matrix, int* result) {
             
             tile_static int localData[tileSize][tileSize];
             localData[tidx.local[1]][tidx.local[0]] = inData[tidx.global];
-
             tidx.barrier.wait();
+
             index<2> outIdx(index<2>(tidx.tile_origin[1], tidx.tile_origin[0]) + tidx.local);
             outData[outIdx] = localData[tidx.local[0]][tidx.local[1]];
         });
