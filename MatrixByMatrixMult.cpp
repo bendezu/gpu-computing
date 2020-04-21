@@ -42,17 +42,23 @@ void matrixByMatrixMult() {
 
 void multiplyOnSingleCpu(int rows1, int internalDim, int cols2, int** first, int** second, int** result) {
     for (int i = 0; i < rows1; i++)
-        for (int j = 0; j < cols2; j++)
+        for (int j = 0; j < cols2; j++) {
+            int sum = 0;
             for (int k = 0; k < internalDim; k++)
-                result[i][j] = first[i][k] * second[k][j];
+                sum += first[i][k] * second[k][j];
+            result[i][j] = sum;
+        }
 }
 
 void multiplyOnMultipleCpus(int rows1, int internalDim, int cols2, int** first, int** second, int** result) {
     #pragma omp parallel for
     for (int i = 0; i < rows1; i++)
-        for (int j = 0; j < cols2; j++)
+        for (int j = 0; j < cols2; j++) {
+            int sum = 0;
             for (int k = 0; k < internalDim; k++)
-                result[i][j] = first[i][k] * second[k][j];
+                sum += first[i][k] * second[k][j];
+            result[i][j] = sum;
+        }
 }
 
 void multiplyOnGpu(int rows1, int internalDim, int cols2, int* first, int* second, int* result) {
