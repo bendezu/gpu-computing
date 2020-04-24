@@ -1,12 +1,14 @@
 ﻿#pragma once
 #include "lab1.h"
 #include "lab2.h"
+#include "lab3.h"
 
 void lab1();
 void lab2();
+void lab3();
 
 int main() {
-    lab2();
+    lab3();
     return 0;
 }
 
@@ -33,4 +35,9 @@ void lab2() {
 
     cout << "BLOCK MATRIX MULTIPLICATION" << endl;
     blockMatrixMult();
+}
+
+void lab3() {
+    cout << "REDUCTION: VECTOR SUM" << endl;
+    vectorSum();
 }

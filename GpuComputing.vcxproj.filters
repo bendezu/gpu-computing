@@ -19,6 +19,9 @@
     <Filter Include="Исходные файлы\Lab2">
       <UniqueIdentifier>{469f012c-fcc6-4cfc-83cd-f92f42a6c2a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Lab3">
+      <UniqueIdentifier>{16b5c56e-0b25-4daf-96e7-cdac7565c32d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,6 +54,9 @@
     <ClCompile Include="BlockTransposition.cpp">
       <Filter>Исходные файлы\Lab2</Filter>
     </ClCompile>
+    <ClCompile Include="VectorSum.cpp">
+      <Filter>Исходные файлы\Lab3</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="timer.h">
@@ -66,6 +72,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="lab2.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="lab3.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
