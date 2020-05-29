@@ -4,13 +4,14 @@
 static const int ITERATIONS = 5;
 
 static const int WINDOW = std::pow(2, 10);
-static const int tileSize = 32;
-static const int size = std::pow(2, 10) * WINDOW;
+static const int tileSize = 1024;
+static const int size = std::pow(tileSize, 1) * WINDOW;
 
 int cpuReduction(int* vector);
 int strideReduction(int* vector);
 int windowStrideReduction(int* vector);
-void tiledReduction(int* vector);
+int tiledReduction(int* vector);
+int fixedTiledReduction(int* vector);
 
 void vectorSum() {
     cout << "Initialization" << endl;
@@ -40,7 +41,7 @@ void vectorSum() {
     avg = 0;
     for (int i = 0; i <= ITERATIONS; i++) {
         timer.Start();
-        int result = strideReduction(vector);
+        int result = 0;// strideReduction(vector);
         timer.Stop();
         if (i == 0) {
             cout << "checksum: " << result << endl;
@@ -56,7 +57,7 @@ void vectorSum() {
     avg = 0;
     for (int i = 0; i <= ITERATIONS; i++) {
         timer.Start();
-        int result = windowStrideReduction(vector);
+        int result = 0;// windowStrideReduction(vector);
         timer.Stop();
         if (i == 0) {
             cout << "checksum: " << result << endl;
@@ -69,10 +70,20 @@ void vectorSum() {
     cout << "GPU average is " << avg << "ms" << endl << endl;
 
     cout << "Tiled reduction starts" << endl;
-    timer.Start();
-    //tiledReduction(vector);
-    timer.Stop();
-    cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
+    avg = 0;
+    for (int i = 0; i <= ITERATIONS; i++) {
+        timer.Start();
+        int result = tiledReduction(vector);
+        timer.Stop();
+        if (i == 0) {
+            cout << "checksum: " << result << endl;
+            continue;
+        }
+        auto elapsed = timer.Elapsed();
+        cout << "iteration " << i << ": " << elapsed << "ms" << endl;
+        avg += elapsed / ITERATIONS;
+    }
+    cout << "GPU average is " << avg << "ms" << endl << endl;
 }
 
 int cpuReduction(int* vector) {
@@ -110,7 +121,7 @@ int windowStrideReduction(int* vector) {
     return array[0];
 }
 
-void tiledReduction(int* vector) {
+int tiledReduction(int* vector) {
     array_view<int, 1> array(size, vector);
     parallel_for_each(
         array.extent.tile<tileSize>(), 
@@ -126,12 +137,12 @@ void tiledReduction(int* vector) {
                 if (workingThread) {
                     local[localIdx] += local[localIdx + step];
                 }
+                tidx.barrier.wait();
             }
-            //tidx.barrier.wait();
             if (localIdx == 0) array[tidx.global] = local[localIdx];
         });
     array.synchronize();
-
+    // дополнительные запуски на gpu (для наглядности не стал объединять с предыдущем запуском)
     int numberOfLocalSums = size / tileSize;
     int step = tileSize;
     while (numberOfLocalSums > tileSize) {
@@ -148,18 +159,68 @@ void tiledReduction(int* vector) {
                 if (workingThread) {
                     local[localIdx] += local[localIdx + localStep];
                 }
+                tidx.barrier.wait();
             }
-            //tidx.barrier.wait();
             if (localIdx == 0) array[step * tidx.global] = local[localIdx];
         });
         array.synchronize();
         step *= tileSize;
         numberOfLocalSums = std::ceil(numberOfLocalSums / (float)tileSize);
     }
-
+    // sum on cpu
     int sum = 0;
     for (int i = 0; i < numberOfLocalSums; i++) {
         sum += array[i * step];
     }
-    cout << "GPU result: " << sum << endl;
+    return sum;
+}
+
+int fixedTiledReduction(int* vector) {
+    array_view<int, 1> array(size, vector);
+    parallel_for_each(
+        array.extent.tile<tileSize>(),
+        [=](tiled_index<tileSize> tidx) restrict(amp) {
+            tile_static int local[tileSize];
+            int localIdx = tidx.local[0];
+            //copy
+            local[localIdx] = array[tidx.global];
+            tidx.barrier.wait();
+            //local sum
+            for (int step = tileSize / 2; step > 0; step /= 2) {
+                if (localIdx < step)
+                    local[localIdx] += local[localIdx + step];
+                tidx.barrier.wait();
+            }
+            if (localIdx == 0) array[tidx.global] = local[localIdx];
+        });
+    array.synchronize();
+    // дополнительные запуски на gpu (для наглядности не стал объединять с предыдущем запуском)
+    int numberOfLocalSums = size / tileSize;
+    int step = tileSize;
+    while (numberOfLocalSums > tileSize) {
+        extent<1> e(numberOfLocalSums);
+        parallel_for_each(e.tile<tileSize>(), [=](tiled_index<tileSize> tidx) restrict(amp) {
+            tile_static int local[tileSize];
+            int localIdx = tidx.local[0];
+            //copy
+            local[localIdx] = array[step * tidx.global];
+            tidx.barrier.wait();
+            //local sum
+            for (int localStep = tileSize / 2; localStep > 0; localStep /= 2) {
+                if (localIdx < localStep)
+                    local[localIdx] += local[localIdx + localStep];
+                tidx.barrier.wait();
+            }
+            if (localIdx == 0) array[step * tidx.global] = local[localIdx];
+            });
+        array.synchronize();
+        step *= tileSize;
+        numberOfLocalSums = std::ceil(numberOfLocalSums / (float)tileSize);
+    }
+    // sum on cpu
+    int sum = 0;
+    for (int i = 0; i < numberOfLocalSums; i++) {
+        sum += array[i * step];
+    }
+    return sum;
 }
