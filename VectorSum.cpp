@@ -1,13 +1,15 @@
 #include "lab3.h"
 #include "utils.h"
 
+static const int ITERATIONS = 5;
+
 static const int initialStride = 3;
 static const int window = 2;
 static const int tileSize = 32;
 static const int size = std::pow(tileSize, 5);// 2 * window * initialStride;
 
-void cpuReduction(int* vector);
-void strideReduction(int* vector);
+int cpuReduction(int* vector);
+int strideReduction(int* vector);
 void windowStrideReduction(int* vector);
 void tiledReduction(int* vector);
 
@@ -19,18 +21,38 @@ void vectorSum() {
     cout << "size: " << size << endl << endl;
     auto vector = generateIntArray(size);
     auto timer = Timer();
+    int avg = 0;
 
     cout << "CPU reduction starts" << endl;
-    timer.Start();
-    cpuReduction(vector);
-    timer.Stop();
-    cout << "CPU done in " << timer.Elapsed() << "ms" << endl << endl;
+    for (int i = 0; i <= ITERATIONS; i++) {
+        timer.Start();
+        int result = cpuReduction(vector);
+        timer.Stop();
+        if (i == 0) { 
+            cout << "checksum: " << result << endl; 
+            continue; 
+        }
+        auto elapsed = timer.Elapsed();
+        cout << "iteration " << i << ": " << elapsed << "ms" << endl;
+        avg += elapsed / ITERATIONS;
+    }
+    cout << "CPU average is " << avg << "ms" << endl << endl;
 
     cout << "Stride reduction starts" << endl;
-    timer.Start();
-    //strideReduction(vector);
-    timer.Stop();
-    cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
+    avg = 0;
+    for (int i = 0; i <= ITERATIONS; i++) {
+        timer.Start();
+        int result = strideReduction(vector);
+        timer.Stop();
+        if (i == 0) {
+            cout << "checksum: " << result << endl;
+            continue;
+        }
+        auto elapsed = timer.Elapsed();
+        cout << "iteration " << i << ": " << elapsed << "ms" << endl;
+        avg += elapsed / ITERATIONS;
+    }
+    cout << "GPU average is " << avg << "ms" << endl << endl;
 
     cout << "Window stride reduction starts" << endl;
     timer.Start();
@@ -40,32 +62,28 @@ void vectorSum() {
 
     cout << "Tiled reduction starts" << endl;
     timer.Start();
-    tiledReduction(vector);
+    //tiledReduction(vector);
     timer.Stop();
     cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
 }
 
-void cpuReduction(int* vector) {
+int cpuReduction(int* vector) {
     int sum = 0;
     for (int i = 0; i < size; i++) sum += vector[i];
-    cout << "CPU result: " << sum << endl;
+    return sum;
 }
 
-void strideReduction(int* vector) {
+int strideReduction(int* vector) {
     array_view<int, 1> array(size, vector);
-    extent<1> e(size / initialStride);
-    for (int stride = initialStride - 1; stride >= 0; stride--)
+    for (int stride = size / 2; stride >= 1; stride/=2)
     {
+        extent<1> e(stride);
         parallel_for_each(e, [=](index<1> idx) restrict(amp) {
-            int origin = idx[0] * initialStride;
-            if (stride != 0)
-                array[origin] += array[origin + stride];
-            else if (idx[0] != 0)
-                atomic_fetch_add(&array[0], array[origin]);
+            array[idx[0]] += array[idx[0] + stride];
         });
         array.synchronize();
     }
-    cout << "GPU result: " << array[0] << endl;
+    return array[0];
 }
 
 void windowStrideReduction(int* vector) {
