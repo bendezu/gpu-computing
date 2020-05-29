@@ -3,25 +3,23 @@
 
 static const int ITERATIONS = 5;
 
-static const int initialStride = 3;
-static const int window = 2;
+static const int WINDOW = std::pow(2, 10);
 static const int tileSize = 32;
-static const int size = std::pow(tileSize, 5);// 2 * window * initialStride;
+static const int size = std::pow(2, 10) * WINDOW;
 
 int cpuReduction(int* vector);
 int strideReduction(int* vector);
-void windowStrideReduction(int* vector);
+int windowStrideReduction(int* vector);
 void tiledReduction(int* vector);
 
 void vectorSum() {
     cout << "Initialization" << endl;
-    cout << "initialStride: " << initialStride << endl;
-    cout << "window: " << window << endl;
+    cout << "window: " << WINDOW << endl;
     cout << "tileSize: " << tileSize << endl;
     cout << "size: " << size << endl << endl;
     auto vector = generateIntArray(size);
     auto timer = Timer();
-    int avg = 0;
+    float avg = 0;
 
     cout << "CPU reduction starts" << endl;
     for (int i = 0; i <= ITERATIONS; i++) {
@@ -55,10 +53,20 @@ void vectorSum() {
     cout << "GPU average is " << avg << "ms" << endl << endl;
 
     cout << "Window stride reduction starts" << endl;
-    timer.Start();
-    //windowStrideReduction(vector);
-    timer.Stop();
-    cout << "GPU done in " << timer.Elapsed() << "ms" << endl << endl;
+    avg = 0;
+    for (int i = 0; i <= ITERATIONS; i++) {
+        timer.Start();
+        int result = windowStrideReduction(vector);
+        timer.Stop();
+        if (i == 0) {
+            cout << "checksum: " << result << endl;
+            continue;
+        }
+        auto elapsed = timer.Elapsed();
+        cout << "iteration " << i << ": " << elapsed << "ms" << endl;
+        avg += elapsed / ITERATIONS;
+    }
+    cout << "GPU average is " << avg << "ms" << endl << endl;
 
     cout << "Tiled reduction starts" << endl;
     timer.Start();
@@ -79,38 +87,27 @@ int strideReduction(int* vector) {
     {
         extent<1> e(stride);
         parallel_for_each(e, [=](index<1> idx) restrict(amp) {
-            array[idx[0]] += array[idx[0] + stride];
+                array[idx[0]] += array[idx[0] + stride];
         });
         array.synchronize();
     }
     return array[0];
 }
 
-void windowStrideReduction(int* vector) {
+int windowStrideReduction(int* vector) {
     array_view<int, 1> array(size, vector);
-    extent<1> e(size / initialStride / window);
-    for (int stride = initialStride - 1; stride >= 0; stride--)
+    int _window = WINDOW;
+    for (int stride = size / WINDOW; stride >= 1; stride /= WINDOW)
     {
+        extent<1> e(stride);
         parallel_for_each(e, [=](index<1> idx) restrict(amp) {
-            int origin = idx[0] * window * initialStride;
-            if (stride != 0) {
-                for (int i = window - 1; i >= 0; i--) {
-                    int windowOrigin = origin + i * initialStride;
-                    array[origin] += array[windowOrigin + stride];
-                }
-            } else {
-                for (int i = window - 1; i >= 0; i--) {
-                    int windowOrigin = origin + i * initialStride;
-                    if (i != 0)
-                        atomic_fetch_add(&array[origin], array[windowOrigin]);
-                    else if (idx[0] != 0)
-                        atomic_fetch_add(&array[0], array[origin]);
-                }
+            for (int i = 1; i < _window; i++) {
+                array[idx[0]] += array[idx[0] + i * stride];
             }
         });
         array.synchronize();
     }
-    cout << "GPU result: " << array[0] << endl;
+    return array[0];
 }
 
 void tiledReduction(int* vector) {
